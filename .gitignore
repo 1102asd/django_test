@@ -91,8 +91,8 @@ ENV/
 
 # Instance
 media/
-diagnosis/settings/instance*.py
-diagnosis/settings/debug*
+django_test/settings/instance*.py
+django_test/settings/debug*
 logs/
 
 # Editors & IDEs
@@ -111,4 +111,3 @@ logs/
 .vscode/
 
 # tmp
-diagnosis_title/templates/tmp/
