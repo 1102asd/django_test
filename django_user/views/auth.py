@@ -5,14 +5,16 @@ from logging import getLogger
 
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.response import Response
 
 from django_user.authentication import ExpiringTokenAuthentication
 from .base import BaseAPIView
 from ..serializers import AuthSerializer, UserSerializer
 from ..models import ApiToken
 from ..authentication import get_token_expires
-
+from ..serializers.auth import AuthResponseSerializer
 
 logger = getLogger('taps')
 
@@ -24,31 +26,16 @@ class AuthTokenAPIView(BaseAPIView):
     def get_authenticate_header(self, request):
         return ExpiringTokenAuthentication().authenticate_header(request)
 
+    @swagger_auto_schema(
+        request_body=AuthSerializer(),
+        responses={
+            "200": AuthResponseSerializer(),
+        },
+        operation_description="获取用户 token, 使用 用户名和密码",
+    )
     def post(self, request):
         """获取用户 token, 使用 用户名和密码。
-
-        request data:
-
-        {
-            "type": 0,  # 0 个人侧， 1 企业侧, 2 政府侧
-            "token_max_age": 30,  # 单位为天
-            "username": "person_1", # 用户名, 当用户名和对应type不一致的时候，以username 为主
-        }
-
-        response data:
-
-        {
-            "token": "abcddemo",
-            "expires": "2013-01-29T12:34:56.000000Z"     # 过期时间，ISO 8601 格式
-        }
-
-        然后使用如下 HTTP Header:
-
-        ```
-         Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b
-        ```
-
-        测试环境账号：admin/123456
+        测试环境账号：test/123456
         """
         auth_serializer = AuthSerializer(data=request.data)
         if not auth_serializer.is_valid():
@@ -66,11 +53,11 @@ class AuthTokenAPIView(BaseAPIView):
             token, _ = ApiToken.objects.get_or_create(user=user)
         token.set_max_age(token_max_age)
         token.save()
-        user_serialized = UserSerializer(user)
+        user_serialized = AuthResponseSerializer(user, partial=True)
         data = {
             'token': token.key,
             'expires': get_token_expires(token),
             'user': user_serialized.data,
             # 'tenant': request.tenant.name,
         }
-        return JsonResponse(data)
+        return Response(data=data)

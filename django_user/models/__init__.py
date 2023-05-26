@@ -7,5 +7,5 @@
 @Date : 2023/5/2517:52
 """
 from .base import BaseModel
-from .user import BaseUser
+from .user import UserProfile
 from .token import ApiToken

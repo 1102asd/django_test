@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from django_user.models.base import BaseModel
 
 
-class BaseUser(BaseModel):
+class UserProfile(BaseModel):
     class Meta(BaseModel.Meta):
         db_table = 'user'
 
@@ -28,17 +28,18 @@ class BaseUser(BaseModel):
     name = models.CharField(verbose_name="姓名", max_length=100, help_text="姓名", blank=True)
     type = models.SmallIntegerField(verbose_name='用户类型', choices=UserType.choices, default=UserType.CUSTOMER)
     is_admin = models.BooleanField(verbose_name='是否是管理权限组成员', default=False)
+    is_enabled = models.BooleanField(verbose_name='是否启用', default=True, help_text='是否启用，启用才可以登录')
 
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, using, **kwargs):
     if created:
         try:
-            BaseUser.objects.using(using).get(user=instance)
-        except BaseUser.DoesNotExist:
-            BaseUser.objects.using(using).create(user=instance)
+            UserProfile.objects.using(using).get(user=instance)
+        except UserProfile.DoesNotExist:
+            UserProfile.objects.using(using).create(user=instance)
 
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, using, **kwargs):
-    instance.baseuser.save(using=using)
+    instance.userprofile.save(using=using)

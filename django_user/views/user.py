@@ -9,11 +9,12 @@
 from django.contrib.auth.hashers import make_password
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
-from django_user.models import BaseUser
+from django_user.models import UserProfile
 from django_user.serializers import UserSerializer
 from django_filters import rest_framework as filters
 
 from django_test.rest.filters import BaseFilterSet
+from django_user.serializers.user import UserPostSerializer
 from django_user.views.base import BaseAPIView
 
 
@@ -23,7 +24,7 @@ class InquiryRecodingFilterSet(BaseFilterSet):
     )
 
     class Meta:
-        model = BaseUser
+        model = UserProfile
         fields = ["name"]
 
 
@@ -32,7 +33,7 @@ class UserAPIView(BaseAPIView):
     permission_classes = ()
 
     @swagger_auto_schema(
-        request_body=UserSerializer(),
+        request_body=UserPostSerializer(),
         responses={
             "200": UserSerializer(),
         },
@@ -43,6 +44,5 @@ class UserAPIView(BaseAPIView):
         serializer = UserSerializer(data=data, partial=True)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
-        validated_data['password'] = make_password(validated_data['password'])
         serializer.create(validated_data)
         return Response(data=serializer.validated_data)
