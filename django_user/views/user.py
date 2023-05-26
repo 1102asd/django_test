@@ -6,26 +6,11 @@
 @Author : 何顺昌
 @Date : 2023/5/2518:10
 """
-from django.contrib.auth.hashers import make_password
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
-from django_user.models import UserProfile
-from django_user.serializers import UserSerializer
-from django_filters import rest_framework as filters
 
-from django_test.rest.filters import BaseFilterSet
-from django_user.serializers.user import UserPostSerializer
-from django_user.views.base import BaseAPIView
-
-
-class InquiryRecodingFilterSet(BaseFilterSet):
-    recoding_status = filters.NumberFilter(
-        help_text="1，进行中，0 已结束", method="get_query_recoding", required=True
-    )
-
-    class Meta:
-        model = UserProfile
-        fields = ["name"]
+from django_user.views import BaseAPIView
+from django_user.serializers import UserSerializer, UserPostSerializer
 
 
 class UserAPIView(BaseAPIView):

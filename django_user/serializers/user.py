@@ -5,26 +5,39 @@ from django.contrib.auth.validators import ASCIIUsernameValidator
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .base import BaseModelSerializer
-from ..models.user import UserProfile
+from django_hrm.models import Customer, Business
+from django_hrm.serializers.business import BusinessSerializer
+from django_hrm.serializers.customer import CustomerSerializer
+from django_user.models import UserProfile
+from django_user.serializers import BaseModelSerializer
+
+
+class CustomerExistsValidator(object):
+    def __call__(self, value):
+        if not Customer.objects.get(id=value):
+            message = '无效人员 %s - 这个人员 ID 不存在' % value
+            raise serializers.ValidationError(message)
+
+
+class BusinessExistsValidator(object):
+    def __call__(self, value):
+        if not Business.objects.get(id=value):
+            message = '无效人员 %s - 这个人员 ID 不存在' % value
+            raise serializers.ValidationError(message)
 
 
 class UserProfileSerializer(BaseModelSerializer):
-    name = serializers.CharField(max_length=128, help_text="用户名", required=True, allow_blank=False, )
-    type = serializers.ChoiceField(
-        choices=UserProfile.UserType.choices, help_text="类别"
-    )
-    is_admin = serializers.BooleanField(label="是否是admin用户", default=False, required=False)
+    customer_id = serializers.CharField(max_length=128, help_text="绑定顾客 ID", required=True, allow_blank=False,
+                                        validators=[CustomerExistsValidator()])
+    business_id = serializers.CharField(max_length=128, help_text="绑定商家 ID", required=True, allow_blank=False,
+                                        validators=[BusinessExistsValidator()])
+    customer = CustomerSerializer(read_only=True)
+    business = BusinessSerializer(read_only=True)
 
     class Meta(BaseModelSerializer.Meta):
         model = UserProfile
         exclude = ['user', 'created', 'updated']
-        read_only_fields = ['is_admin']
-
-    def validate_is_admin(self, value):
-        if self.type == UserProfile.UserType.ADMIN:
-            return True
-        return False
+        read_only_fields = ['is_admin', 'customer', 'business', "type"]
 
 
 class UserPostSerializer(serializers.ModelSerializer):
@@ -49,7 +62,7 @@ class UserSerializer(serializers.ModelSerializer):
     ])
     password = serializers.CharField(max_length=18, min_length=6)
     type = serializers.ChoiceField(
-        choices=UserProfile.UserType.choices, help_text="类别"
+        choices=UserProfile.UserType.choices, help_text="类别", required=False
     )
     userprofile = UserProfileSerializer()
 

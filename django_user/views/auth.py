@@ -9,12 +9,11 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 
-from django_user.authentication import ExpiringTokenAuthentication
-from .base import BaseAPIView
-from ..serializers import AuthSerializer
-from ..models import ApiToken
-from ..authentication import get_token_expires
-from ..serializers.auth import AuthResponseSerializer
+from django_user.authentication import ExpiringTokenAuthentication, get_token_expires
+from django_user.models import ApiToken
+from django_user.serializers import AuthSerializer, UserSerializer
+from django_user.serializers.auth import AuthResponseSerializer
+from django_user.views import BaseAPIView
 
 logger = getLogger('taps')
 
@@ -53,7 +52,7 @@ class AuthTokenAPIView(BaseAPIView):
             token, _ = ApiToken.objects.get_or_create(user=user)
         token.set_max_age(token_max_age)
         token.save()
-        user_serialized = AuthResponseSerializer(user, partial=True)
+        user_serialized = UserSerializer(user, partial=True)
         data = {
             'token': token.key,
             'expires': get_token_expires(token),

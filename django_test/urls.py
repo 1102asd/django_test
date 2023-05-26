@@ -22,6 +22,7 @@ from django.conf.urls import include, url
 urlpatterns = [
     # path('admin/', admin.site.urls),
     url(r"^api/v1/django-user/", include("django_user.urls")),
+    url(r"^api/v1/django-hrm/", include("django_hrm.urls")),
 ]
 if settings.SHOW_SWAGGER_DOCS:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
