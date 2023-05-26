@@ -40,8 +40,9 @@ class Customer(BaseModel):
                 user = User.objects.create_user(username=user_name, password=password)
                 user.userprofile.type = UserProfile.UserType.CUSTOMER
                 user.userprofile.name = user_name
-                user.userprofile.customer = customer_obj
-                customer_obj.create_user = user.userprofile.id
+                user.userprofile.customer_id = customer_obj.id
+                customer_obj.create_user_id = user.userprofile.id
+                customer_obj.update_user_id = user.userprofile.id
                 customer_obj.save()
                 user.userprofile.save()
         logging.info('登录顾客用户id为', user.id)

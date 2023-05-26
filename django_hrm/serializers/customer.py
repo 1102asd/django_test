@@ -9,7 +9,9 @@
 from rest_framework import serializers
 
 from django_hrm.models import Customer
-from django_user.serializers import BaseModelSerializer
+from django_test.utils.rest_serializers import (
+    BaseModelSerializer,
+)
 
 
 class CreateCustomerSerializer(serializers.Serializer):
@@ -17,7 +19,7 @@ class CreateCustomerSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, allow_blank=False, max_length=100)
     token_max_age = serializers.IntegerField(min_value=1, max_value=60, default=1)
 
-class CustomerSerializer(BaseModelSerializer):
 
+class CustomerSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Customer
