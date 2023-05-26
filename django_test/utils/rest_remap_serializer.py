@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.serializers import raise_errors_on_nested_writes
 from rest_framework.utils import model_meta
 
-from diagnosis.rest.fields import NormalizedDecimalField
+from django_test.rest.fields import NormalizedDecimalField
 
 
 class BaseRemapModelSerializer(serializers.ModelSerializer):

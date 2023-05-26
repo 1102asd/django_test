@@ -1,4 +1,4 @@
-from diagnosis.exceptions import ModelProtectedError
+from django_test.exceptions import ModelProtectedError
 from ..registry import foreignkeys
 
 

@@ -6,7 +6,11 @@
 @Author : 何顺昌
 @Date : 2023/5/2517:52
 """
+from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
+from django.contrib.auth.models import User
 
 from django_user.models.base import BaseModel
 
@@ -20,6 +24,21 @@ class BaseUser(BaseModel):
         CUSTOMER = 1, '普通用户'
         VIP_CUSTOMER = 2, 'VIP'
 
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name="账号", on_delete=models.CASCADE)
     name = models.CharField(verbose_name="姓名", max_length=100, help_text="姓名", blank=True)
     type = models.SmallIntegerField(verbose_name='用户类型', choices=UserType.choices, default=UserType.CUSTOMER)
-    passwd = models.CharField(verbose_name="密码", max_length=100, help_text="密码", blank=True)
+    is_admin = models.BooleanField(verbose_name='是否是管理权限组成员', default=False)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, using, **kwargs):
+    if created:
+        try:
+            BaseUser.objects.using(using).get(user=instance)
+        except BaseUser.DoesNotExist:
+            BaseUser.objects.using(using).create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, using, **kwargs):
+    instance.baseuser.save(using=using)
