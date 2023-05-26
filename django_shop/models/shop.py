@@ -20,8 +20,7 @@ class Shop(BaseModel):
         }
 
     id = UnsignedBigAutoField(primary_key=True, editable=False)
-    shop_name = models.CharField(verbose_name="店铺名称", help_text="店铺名称", )
-    shop_url = models.CharField(verbose_name="店铺url", help_text="店铺url", )
-    shop_pic = models.CharField(verbose_name="店铺图片url", help_text="店铺图片url", )
-    content = models.CharField(verbose_name="店铺简介", help_text="店铺简介", null=True)
-
+    shop_name = models.CharField(verbose_name="店铺名称", help_text="店铺名称", max_length=128)
+    shop_url = models.CharField(verbose_name="店铺url", help_text="店铺url", max_length=128)
+    shop_pic = models.CharField(verbose_name="店铺图片url", help_text="店铺图片url", max_length=128)
+    content = models.TextField(verbose_name="店铺简介", help_text="店铺简介", null=True)

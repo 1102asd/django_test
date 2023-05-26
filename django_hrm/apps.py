@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class DjangoShopConfig(AppConfig):
-    name = 'django_shop'
+class DjangoHrmConfig(AppConfig):
+    name = 'django_hrm'

@@ -6,7 +6,7 @@
 @Author : 何顺昌
 @Date : 2023/5/2615:26
 """
-from django_test.db.models import BaseModel, UnsignedBigAutoField
+from django_test.db.models import BaseModel, UnsignedBigAutoField, UnsignedBigIntegerField
 from django.db import models
 
 
@@ -20,7 +20,7 @@ class ShopStyle(BaseModel):
         }
 
     id = UnsignedBigAutoField(primary_key=True, editable=False)
-    tag_name = models.CharField(verbose_name="店铺类型", )
+    tag_name = models.CharField(verbose_name="店铺类型", max_length=128)
 
 
 class ShopToStyle(BaseModel):
@@ -35,5 +35,5 @@ class ShopToStyle(BaseModel):
         }
 
     id = UnsignedBigAutoField(primary_key=True, editable=False)
-    shop_id = UnsignedBigAutoField(verbose_name="店铺id")
-    shop_style_id = UnsignedBigAutoField(verbose_name="店铺类型id")
+    shop_id = UnsignedBigIntegerField(verbose_name="店铺id")
+    shop_style_id = UnsignedBigIntegerField(verbose_name="店铺类型id")

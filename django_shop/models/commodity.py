@@ -20,4 +20,4 @@ class Commodity(BaseModel):
     score = models.FloatField(default=0, help_text="业绩分-积分制, +10为加10分，-10为减10分")
     price = models.FloatField(default=0, help_text="商品价格")
     context = models.TextField(verbose_name='商品介绍', help_text='商品介绍', null=True)
-    commodity_url = models.CharField(verbose_name='商品地址', help_text="商品地址")
+    commodity_url = models.CharField(verbose_name='商品地址', help_text="商品地址",max_length=128)

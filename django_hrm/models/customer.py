@@ -21,7 +21,7 @@ class Customer(BaseModel):
         }
 
     id = UnsignedBigAutoField(primary_key=True, editable=False)
-    name = models.CharField(verbose_name="顾客账户名称", help_text="商家账户名称")
-    customer_url = models.CharField(verbose_name="顾客头像url", help_text="顾客头像url")
+    name = models.CharField(verbose_name="顾客账户名称", help_text="商家账户名称",max_length=128)
+    customer_url = models.CharField(verbose_name="顾客头像url", help_text="顾客头像url",max_length=128)
     context = models.TextField(verbose_name="顾客简介", help_text="顾客简介")
     attention_count = UnsignedIntegerField(verbose_name='关注的店铺数量', default=0)
