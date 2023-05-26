@@ -45,7 +45,7 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
 
 
 schema_view = get_schema_view(
-    openapi.Info(title="diagnosis API", default_version='v1',),
+    openapi.Info(title="django_test API", default_version='v1',),
     public=True,
     permission_classes=(permissions.AllowAny,),
     generator_class=CustomOpenAPISchemaGenerator,
