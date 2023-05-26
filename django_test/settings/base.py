@@ -111,10 +111,10 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ),  # search_fields
-    # "EXCEPTION_HANDLER": "django_test.exceptions.diagnosis_error_handler",
-    # "DEFAULT_AUTHENTICATION_CLASSES": (
-    #     "sso2.authentication.ExpiringTokenAuthentication",
-    # ),
+    "EXCEPTION_HANDLER": "django_test.exceptions.diagnosis_error_handler",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "django_user.authentication.ExpiringTokenAuthentication",
+    ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "URL_FORMAT_OVERRIDE": None,
 }

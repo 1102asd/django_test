@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from django_user.authentication import ExpiringTokenAuthentication
 from .base import BaseAPIView
-from ..serializers import AuthSerializer, UserSerializer
+from ..serializers import AuthSerializer
 from ..models import ApiToken
 from ..authentication import get_token_expires
 from ..serializers.auth import AuthResponseSerializer
