@@ -7,3 +7,4 @@
 @Date : 2023/5/2616:12
 """
 from .customer import CreateCustomerSerializer
+from .shop import ShopSerializer

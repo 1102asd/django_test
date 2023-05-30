@@ -8,7 +8,7 @@ class ExpandFieldsModelSerializerMixin(object):
     """A ModelSerializer mixin that uses expand to control whether fields
     should do nested serialization.
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> object:
         self.expanded_fields = []
         super(ExpandFieldsModelSerializerMixin, self).__init__(*args, **kwargs)
         expand = self.context.get('expand', [])

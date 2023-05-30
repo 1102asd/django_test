@@ -9,4 +9,4 @@
 from .base import BaseModelViewSet, BaseAPIView, BaseReadOnlyModelViewSet, BaseModelViewSet, BasePaginationMixin
 from .user import UserAPIView
 from .auth import AuthTokenAPIView
-
+from .shop_style import ShopStyleViewSet

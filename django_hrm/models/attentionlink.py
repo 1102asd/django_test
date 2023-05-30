@@ -9,7 +9,6 @@
 from django.db import transaction
 from django.db import models
 
-
 from django_test.db.models import BaseModel, UnsignedBigAutoField, UnsignedBigIntegerField
 
 
@@ -17,18 +16,20 @@ class AttentionLinkManager(models.Manager):
     @transaction.atomic
     def like(self, customer_id, business_id):
         from django_hrm.models import Customer, Business
-        customer = Customer.objects.filter(id=customer_id).first()
-        customer.attention_count += 1
-        customer.save()
-        business = Business.objects.filter(id=business_id).first()
-        business.be_attention_count += 1
-        business.save()
-        return business
+        attention_obj = AttentionLink.objects.filter(customer_id=customer_id, business_id=business_id).first()
+        if not attention_obj:
+            customer = Customer.objects.filter(id=customer_id).first()
+            customer.attention_count += 1
+            customer.save()
+            business = Business.objects.filter(id=business_id).first()
+            business.be_attention_count += 1
+            business.save()
+            AttentionLink.objects.create(customer_id=customer_id, business_id=business_id)
 
 
-class CustomerToBusiness():
+class AttentionLink(BaseModel):
     class Meta(BaseModel.Meta):
-        db_table = "customer"
+        db_table = "customer_attention_link"
 
     class ForeignKeyConstraint:
         fields = {

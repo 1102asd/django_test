@@ -12,7 +12,7 @@ from django.db import models
 
 class ShopStyle(BaseModel):
     class Meta(BaseModel.Meta):
-        db_table = "shop_style"
+        db_table = "business_shop_style"
 
     class ForeignKeyConstraint:
         fields = {
@@ -25,15 +25,17 @@ class ShopStyle(BaseModel):
 
 class ShopToStyle(BaseModel):
     class Meta(BaseModel.Meta):
-        db_table = "shop_to_style"
+        db_table = "business_shop_to_style"
 
     class ForeignKeyConstraint:
         fields = {
             "create_user_id": {"to_model": "django_user.UserProfile"},
-            "shop_style_id": {"to_model": "django_shop.ShopStyle"},
-            "shop_id": {"to_model": "django_shop.Shop"},
+            "shop_style_id": {"to_model": "django_hrm.ShopStyle"},
+            "shop_id": {"to_model": "django_hrm.Shop"},
+            "business_id": {"to_model": "django_hrm.Business"},
         }
 
     id = UnsignedBigAutoField(primary_key=True, editable=False)
     shop_id = UnsignedBigIntegerField(verbose_name="店铺id")
     shop_style_id = UnsignedBigIntegerField(verbose_name="店铺类型id")
+    business_id = UnsignedBigIntegerField(verbose_name="商家id")

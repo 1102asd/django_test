@@ -12,7 +12,7 @@ from django.db import models
 
 class Commodity(BaseModel):
     class Meta(BaseModel.Meta):
-        db_table = "commodity"
+        db_table = "business_shop_commodity"
 
     id = UnsignedBigAutoField(primary_key=True, editable=False)
     commodity_name = models.CharField(verbose_name='商品名称', max_length=128)

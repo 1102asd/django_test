@@ -36,6 +36,9 @@ class UserPasswordError(BaseError):
     code = 30
     message = '用户名已存在，密码错误'
 
+class UserPermissionError(BaseError):
+    code = 40
+    message = '没有权限'
 
 def diagnosis_error_handler(exc, context):
     if isinstance(exc, BaseError):

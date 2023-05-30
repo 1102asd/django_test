@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "corsheaders",
     # 'sso.apps.SsoConfig',
     "django_user.apps.DjangoUserConfig",
-    "django_shop.apps.DjangoShopConfig",
     "django_hrm.apps.DjangoHrmConfig",
 ]
 
