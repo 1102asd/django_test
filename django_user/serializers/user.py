@@ -29,8 +29,9 @@ class BusinessExistsValidator(object):
 class UserProfileSerializer(BaseModelSerializer):
     customer_id = serializers.CharField(max_length=128, help_text="绑定顾客 ID", required=True, allow_blank=False,
                                         validators=[CustomerExistsValidator()])
-    business_id = serializers.CharField(max_length=128, help_text="绑定商家 ID", required=True, allow_blank=False,
-                                        validators=[BusinessExistsValidator()])
+
+    # business_id = serializers.CharField(max_length=128, help_text="绑定商家 ID", required=True, allow_blank=False,
+    #                                     validators=[BusinessExistsValidator()])
     customer = CustomerSerializer(read_only=True)
     business = BusinessSerializer(read_only=True)
 
@@ -82,3 +83,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.userprofile.save()
         user.save()
         return user
+
+
+class UserPasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=18, min_length=6)

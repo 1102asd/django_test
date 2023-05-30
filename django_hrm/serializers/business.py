@@ -11,6 +11,13 @@ from django_test.utils.rest_serializers import (
     BaseModelSerializer,
 )
 
+
 class BusinessSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
+        model = Business
+
+
+class UpdateBusinessSerializer(BaseModelSerializer):
+    class Meta(BaseModelSerializer.Meta):
+        exclude = ['note']
         model = Business

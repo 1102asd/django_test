@@ -34,7 +34,10 @@ class ExpiringTokenAuthentication(TokenAuthentication):
         #     raise AuthenticationFailed(_('Invalid token.'))
         setattr(_auth_ctx, 'user', user)
         setattr(user, 'type', user.userprofile.type)
-        setattr(user, 'name', user.userprofile.name)
+        setattr(user, 'business', user.userprofile.business)
+        setattr(user, 'business_id', user.userprofile.business_id)
+        setattr(user, 'customer', user.userprofile.customer_id)
+        setattr(user, 'customer_id', user.userprofile.customer_id)
         return user, token
 
 

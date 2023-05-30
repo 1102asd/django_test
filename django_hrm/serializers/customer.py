@@ -20,6 +20,12 @@ class CreateCustomerSerializer(serializers.Serializer):
     token_max_age = serializers.IntegerField(min_value=1, max_value=60, default=1)
 
 
+class UpdateCustomerSerializer(BaseModelSerializer):
+    class Meta(BaseModelSerializer.Meta):
+        exclude = ['note']
+        model = Customer
+
+
 class CustomerSerializer(BaseModelSerializer):
     class Meta(BaseModelSerializer.Meta):
         model = Customer

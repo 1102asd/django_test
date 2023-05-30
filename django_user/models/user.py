@@ -24,8 +24,8 @@ class UserProfile(BaseModel):
     class ForeignKeyConstraint:
         fields = {
             "create_user_id": {"to_model": "django_user.UserProfile"},
-            "business_id": {"to_model": "django_hrm.Business"},
             "customer_id": {"to_model": "django_hrm.Customer"},
+            "business_id": {"to_model": "django_hrm.Business"},
         }
 
     class UserType(models.IntegerChoices):
@@ -56,14 +56,14 @@ class UserProfile(BaseModel):
         if not hasattr(self, '_customer'):
             self._customer = None
             if self.customer_id:
-                self._business = Customer.objects.get(id=self.customer_id)
+                self._customer = Customer.objects.get(id=self.customer_id)
         return self._customer
 
     def _set_customer(self, customer):
         self._customer = customer
 
-    customer = property(_get_customer, _set_customer)
     business = property(_get_business, _set_business)
+    customer = property(_get_customer, _set_customer)
     del _get_customer, _set_customer
     del _set_business, _get_business
 

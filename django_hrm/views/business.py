@@ -7,11 +7,14 @@
 @Date : 2023/5/2615:33
 """
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
 from rest_framework.response import Response
 
 from django_hrm.models import Customer, Business
 from django_hrm.serializers import CreateCustomerSerializer
+from django_hrm.serializers.business import UpdateBusinessSerializer
 from django_user.authentication import get_token_expires
+from django_user.models import UserProfile
 from django_user.serializers import UserSerializer
 from django_user.serializers.auth import AuthResponseSerializer
 from django_user.views.base import BaseAPIView
@@ -43,3 +46,21 @@ class BusinessCreateAPIView(BaseAPIView):
             'user': user_serialized.data
         }
         return Response(data, status=200)
+
+
+class BusinessUpdateAPIView(BaseAPIView):
+
+    @swagger_auto_schema(
+        request_body=UpdateBusinessSerializer(),
+        responses={
+            "200": UpdateBusinessSerializer(),
+        },
+        operation_description="商家修改个人信息",
+    )
+    def put(self, request, *args, **kwargs):
+        person_serializer = UpdateBusinessSerializer(data=request.data)
+        person_serializer.is_valid(raise_exception=True)
+        validated_data = person_serializer.validated_data
+        Business.objects.filter(id=request.user.business_id).update(**validated_data)
+        UserProfile.objects.filter(id=request.user.userprofile.id).update(name=validated_data['name'])
+        return Response(person_serializer.data, status=status.HTTP_200_OK)

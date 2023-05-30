@@ -8,10 +8,12 @@
 """
 import logging
 
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import models, transaction
 
 from django_test.db.models import BaseModel, UnsignedBigAutoField, UnsignedIntegerField
+from django_test.exceptions import UserPasswordError
 
 
 class Customer(BaseModel):
@@ -45,11 +47,16 @@ class Customer(BaseModel):
                 customer_obj.update_user_id = user.userprofile.id
                 customer_obj.save()
                 user.userprofile.save()
-        logging.info('登录顾客用户id为', user.id)
-        logging.info('user_profile的id为', user.userprofile.id)
-        # 生成token
-        token_obj, _ = ApiToken.objects.get_or_create(user=user)
-        if token_obj.is_expired():
-            token_obj.delete()
+                user.save()
+        user = authenticate(username=user_name, password=password)
+        if user:
+            logging.info('登录顾客用户id为', user.id)
+            logging.info('user_profile的id为', user.userprofile.id)
+            # 生成token
             token_obj, _ = ApiToken.objects.get_or_create(user=user)
-        return token_obj, user
+            if token_obj.is_expired():
+                token_obj.delete()
+                token_obj, _ = ApiToken.objects.get_or_create(user=user)
+            return token_obj, user
+        else:
+            raise UserPasswordError()
