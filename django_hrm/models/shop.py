@@ -7,7 +7,7 @@
 @Date : 2023/5/2615:21
 """
 
-from django_test.db.models import BaseModel, UnsignedBigAutoField, UnsignedBigIntegerField
+from django_test.db.models import BaseModel, UnsignedBigAutoField, UnsignedBigIntegerField, UnsignedIntegerField
 from django.db import models, transaction
 
 
@@ -52,6 +52,8 @@ class Shop(BaseModel):
     shop_pic = models.CharField(verbose_name="店铺图片url", help_text="店铺图片url", max_length=128)
     content = models.TextField(verbose_name="店铺简介", help_text="店铺简介", null=True)
     business_id = UnsignedBigIntegerField(verbose_name="所属商家Id", help_text="所属商家Id")
+
+    be_attention_count = UnsignedIntegerField(verbose_name='被多少顾客关注', default=0)
 
     # 关注时原子化信息
     objects_internal = ShopManager()

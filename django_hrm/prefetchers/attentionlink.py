@@ -16,8 +16,9 @@ class CustomerListFetcher(ModelExtraFieldsBase):
             "id": ["self", "id"],
             "create_time": ["self", "create_time"],
             "update_time": ["self", "update_time"],
-            "business_id": ["self", "business_id"],
-            "business_name": ["business", "name"],
-            # "business_tag": ['business']
+            "shop_id": ["self", "shop_id"],
+            "shop_name": ["shop", "shop_name"],
+            "business_id": ['shop', "business_id"],
+            "business_name": ['shop__business', "name"]
         }
         super(CustomerListFetcher, self).__init__(mappings, objs)

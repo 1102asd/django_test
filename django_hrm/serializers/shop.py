@@ -19,7 +19,7 @@ class ShopSerializer(BaseModelSerializer):
 
 class ShopExistsValidator(object):
     def __call__(self, value):
-        if Shop.objects.get(name=value):
+        if Shop.objects.filter(shop_name=value).first():
             message = '此店铺名称： %s - 存在' % value
             raise serializers.ValidationError(message)
 
@@ -43,10 +43,11 @@ class ShopCreateSerializer(serializers.Serializer):
         if not Business.objects.get(id=value):
             message = '此商家： %s - 不存在' % value
             raise serializers.ValidationError(message)
+        return value
 
     def validate_tag_ids(self, value):
         for tag_id in value:
             if not ShopStyle.objects.get(id=tag_id):
                 message = '此商家种类id： %s - 不存在' % tag_id
                 raise serializers.ValidationError(message)
-        return tag_id
+        return value

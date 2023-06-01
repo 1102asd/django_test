@@ -14,17 +14,17 @@ from django_test.db.models import BaseModel, UnsignedBigAutoField, UnsignedBigIn
 
 class AttentionLinkManager(models.Manager):
     @transaction.atomic
-    def like(self, customer_id, business_id):
-        from django_hrm.models import Customer, Business
-        attention_obj = AttentionLink.objects.filter(customer_id=customer_id, business_id=business_id).first()
+    def like(self, customer_id, shop_id):
+        from django_hrm.models import Customer, Shop
+        attention_obj = AttentionLink.objects.filter(customer_id=customer_id, shop_id=shop_id).first()
         if not attention_obj:
             customer = Customer.objects.filter(id=customer_id).first()
             customer.attention_count += 1
             customer.save()
-            business = Business.objects.filter(id=business_id).first()
-            business.be_attention_count += 1
-            business.save()
-            AttentionLink.objects.create(customer_id=customer_id, business_id=business_id)
+            shop = Shop.objects.filter(id=shop_id).first()
+            shop.be_attention_count += 1
+            shop.save()
+            AttentionLink.objects.create(customer_id=customer_id, shop_id=shop_id)
 
 
 class AttentionLink(BaseModel):
@@ -34,13 +34,13 @@ class AttentionLink(BaseModel):
     class ForeignKeyConstraint:
         fields = {
             "create_user_id": {"to_model": "django_user.UserProfile"},
-            "business_id": {"to_model": "django_hrm.Business"},
+            "shop_id": {"to_model": "django_hrm.Shop"},
             "customer_id": {"to_model": "django_hrm.Customer"},
         }
 
     id = UnsignedBigAutoField(primary_key=True, editable=False)
     customer_id = UnsignedBigIntegerField(verbose_name="顾客id", help_text="顾客id")
-    business_id = UnsignedBigIntegerField(verbose_name="关注商家id", help_text="关注商家id")
+    shop_id = UnsignedBigIntegerField(verbose_name="关注商家的店铺ID", help_text="关注商家的店铺ID")
 
     # 关注时原子化信息
     objects_internal = AttentionLinkManager()

@@ -29,7 +29,6 @@ class Business(BaseModel):
     name = models.CharField(verbose_name="商家账户名称", help_text="商家账户名称", max_length=128)
     business_url = models.CharField(verbose_name="商家头像url", help_text="商家头像url", max_length=128, null=True)
     context = models.TextField(verbose_name="商家简介", help_text="商家简介", null=True)
-    be_attention_count = UnsignedIntegerField(verbose_name='被多少顾客关注', default=0)
 
     @classmethod
     def login(cls, user_name, password):

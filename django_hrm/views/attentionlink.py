@@ -40,14 +40,14 @@ class AttentionLinkViewSet(
         responses={
             "200": "",
         },
-        operation_description="顾客关注商家",
+        operation_description="顾客关注商家店铺",
     )
     def create(self, request, *args, **kwargs):
         customer = request.user.userprofile.customer
         attention_serializer = AttentionLinkSerializer(data=request.data)
         attention_serializer.is_valid(raise_exception=True)
         validated_data = attention_serializer.validated_data
-        AttentionLink.objects_internal.like(customer.id, validated_data['business_id'])
+        AttentionLink.objects_internal.like(customer.id, validated_data['shop_id'])
         return Response(status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(

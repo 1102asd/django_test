@@ -13,6 +13,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from django_hrm.models import Shop
+from django_hrm.prefetchers.shop import MyShopFetcher
 from django_hrm.serializers import ShopSerializer
 from django_hrm.serializers.shop import ShopCreateSerializer
 from django_test.rest.filters import BaseFilterSet
@@ -46,7 +47,7 @@ class ShopViewSet(
         business = request.user.userprofile.business
         data = request.data
         data['business_id'] = business.id
-        shop_serializer = ShopCreateSerializer(data=request.data)
+        shop_serializer = ShopCreateSerializer(data=data)
         shop_serializer.is_valid(raise_exception=True)
         validated_data = shop_serializer.validated_data
         Shop.objects_internal.create(validated_data)
@@ -62,5 +63,5 @@ class ShopViewSet(
     def my_shop(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         queryset = queryset.filter(business_id=request.user.userprofile.business_id)
-        # person_list = CustomerListFetcher(queryset, request).data
-        return Response(queryset, status=status.HTTP_200_OK)
+        person_list = MyShopFetcher(queryset, request).data
+        return Response(person_list, status=status.HTTP_200_OK)
